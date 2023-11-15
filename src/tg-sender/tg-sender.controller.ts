@@ -7,6 +7,6 @@ export class TgController {
 
   @Get()
   async getSome() {
-    return this.tgService.sendMessage();
+    //return this.tgService.sendMessage();
   }
 }

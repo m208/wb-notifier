@@ -7,5 +7,6 @@ import { TgController } from './tg-sender.controller';
   imports: [HttpModule],
   providers: [TgSenderService],
   controllers: [TgController],
+  exports: [TgSenderService],
 })
 export class TgSenderModule {}

@@ -3,13 +3,14 @@ import { HttpException, Injectable, Logger } from '@nestjs/common';
 import { AxiosError } from 'axios';
 import { firstValueFrom, catchError } from 'rxjs';
 import { TelegramResponseDTO } from './interfaces/tg-response.interface';
+import { WBNewOrderDetails } from 'src/wb-api/interfaces/wb-new-order-details.interface';
 
 @Injectable()
 export class TgSenderService {
   private readonly logger = new Logger(TgSenderService.name);
   constructor(private readonly httpService: HttpService) {}
 
-  async sendMessage() {
+  async sendMessage(orderDetails: WBNewOrderDetails) {
     const message = `Hello!`;
     const { data } = await firstValueFrom(
       this.httpService
