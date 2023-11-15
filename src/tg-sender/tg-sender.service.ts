@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { HttpException, Injectable, Logger } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { AxiosError } from 'axios';
 import { firstValueFrom, catchError } from 'rxjs';
 import { TelegramResponseDTO } from './interfaces/tg-response.interface';
@@ -7,15 +7,24 @@ import { WBNewOrderDetails } from 'src/wb-api/interfaces/wb-new-order-details.in
 
 @Injectable()
 export class TgSenderService {
-  private readonly logger = new Logger(TgSenderService.name);
   constructor(private readonly httpService: HttpService) {}
 
+  generateMessageContent(orderDetails: WBNewOrderDetails) {
+    const lines = [
+      `Новый заказ на Wildberries`,
+      `На сумму ${orderDetails.price / 100} руб.`,
+      `Состав заказа: ${orderDetails.name}, артикул: ${orderDetails.article}`,
+    ];
+    return lines.join('%0A');
+  }
+
   async sendMessage(orderDetails: WBNewOrderDetails) {
-    const message = `Hello!`;
+    const message = this.generateMessageContent(orderDetails);
+
     const { data } = await firstValueFrom(
       this.httpService
         .get<TelegramResponseDTO>(
-          `https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage?chat_id=${process.env.TG_USER_I}&text=${message}`,
+          `https://api.telegram.org/bot${process.env.TG_BOT_TOKEN}/sendMessage?chat_id=${process.env.TG_USER_ID}&text=${message}`,
         )
         .pipe(
           catchError((error: AxiosError) => {
@@ -24,6 +33,6 @@ export class TgSenderService {
         ),
     );
 
-    return data.ok;
+    return data;
   }
 }
