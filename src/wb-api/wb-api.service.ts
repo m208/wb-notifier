@@ -3,29 +3,19 @@ import { HttpException, Injectable, Logger } from '@nestjs/common';
 import { AxiosError } from 'axios';
 import { firstValueFrom, catchError } from 'rxjs';
 import { wbApiLinks } from 'src/constants/apiLinks';
-import {
-  WBOrdersDataDTO,
-  WbAPIOrdersResponse,
-} from './interfaces/wb-orders-response.interface';
-import { WBNewOrderDetails } from './interfaces/wb-new-order-details.interface';
+import { WbAPIOrdersResponse } from './interfaces/wb-orders-response.interface';
 import { WbAPIContentResponse } from './interfaces/wb-product-response.interface';
 
 @Injectable()
 export class WbApiService {
   private readonly logger = new Logger(WbApiService.name);
-  private handledOrders: Array<number> = [];
+
   constructor(private readonly httpService: HttpService) {}
 
   setAuthHeaders() {
     return {
       Authorization: `Bearer ${process.env.WB_API_TOKEN}`,
     };
-  }
-
-  async checkNewOrders() {
-    const orders = await this.getNewOrders();
-    if (orders.length === 0) return;
-    else this.handleNewOrders(orders);
   }
 
   async getNewOrders() {
@@ -41,27 +31,7 @@ export class WbApiService {
           }),
         ),
     );
-    return data.data;
-  }
-
-  async handleNewOrders(orders: Array<WBOrdersDataDTO>) {
-    for await (const order of orders) {
-      if (!this.handledOrders.includes(order.id)) {
-        const orderDetails = await this.combineOrderDetails(order);
-        // send message
-        this.handledOrders.push(order.id);
-      }
-    }
-  }
-
-  async combineOrderDetails(
-    order: WBOrdersDataDTO,
-  ): Promise<WBNewOrderDetails> {
-    return {
-      article: order.article,
-      price: order.price,
-      name: await this.getProductTitle(order.article),
-    };
+    return data.orders;
   }
 
   async getProductTitle(productCode: string) {

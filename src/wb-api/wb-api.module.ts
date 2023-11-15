@@ -7,5 +7,6 @@ import { HttpModule } from '@nestjs/axios';
   imports: [HttpModule],
   controllers: [WbApiController],
   providers: [WbApiService],
+  exports: [WbApiService],
 })
 export class WbApiModule {}

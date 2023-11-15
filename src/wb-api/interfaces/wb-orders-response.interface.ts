@@ -1,7 +1,7 @@
 // https://openapi.wb.ru/marketplace/api/ru/#tag/Sborochnye-zadaniya/paths/~1api~1v3~1orders~1new/get
 
 export interface WbAPIOrdersResponse {
-  data: Array<WBOrdersDataDTO>;
+  orders: Array<WBOrdersDataDTO>;
 }
 
 export interface WBOrdersDataDTO {
