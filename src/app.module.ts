@@ -6,6 +6,7 @@ import { WbApiModule } from './wb-api/wb-api.module';
 import { ConfigModule } from '@nestjs/config';
 import { TgSenderModule } from './tg-sender/tg-sender.module';
 import { NewOrdersTrackerModule } from './new-orders-tracker/new-orders-tracker.module';
+import { TokenExpiresTrackerModule } from './token-expires-tracker/token-expires-tracker.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { NewOrdersTrackerModule } from './new-orders-tracker/new-orders-tracker.
     WbApiModule,
     TgSenderModule,
     NewOrdersTrackerModule,
+    TokenExpiresTrackerModule,
   ],
   providers: [AppService],
 })
