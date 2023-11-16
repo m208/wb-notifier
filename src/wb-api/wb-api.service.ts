@@ -26,20 +26,20 @@ export class WbApiService {
         })
         .pipe(
           catchError((error: AxiosError) => {
-            this.logger.error(error.response.data);
-            throw 'An error happened!';
+            throw new HttpException(error.response.data, error.response.status);
           }),
         ),
     );
     return data.orders;
   }
 
-  async getProductTitle(productCode: string) {
+  // Допускается максимум 100 запросов в минуту на методы контента в целом.
+  async getProductContent(productCodes: Array<string>) {
     const { data } = await firstValueFrom(
       this.httpService
         .post<WbAPIContentResponse>(
           wbApiLinks.getProducts,
-          { vendorCodes: [productCode] },
+          { vendorCodes: productCodes },
           { headers: this.setAuthHeaders() },
         )
         .pipe(
@@ -48,13 +48,6 @@ export class WbApiService {
           }),
         ),
     );
-
-    const productName: string | undefined = data.data[0].characteristics
-      .filter((el) => Object.keys(el).includes('Наименование'))
-      .map((el) => Object.values(el))
-      .flat()
-      .pop();
-
-    return productName;
+    return data.data;
   }
 }
