@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SchedulerModule } from './scheduler/scheduler.module';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -19,7 +18,6 @@ import { NewOrdersTrackerModule } from './new-orders-tracker/new-orders-tracker.
     TgSenderModule,
     NewOrdersTrackerModule,
   ],
-  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}

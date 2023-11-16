@@ -49,6 +49,7 @@ export class NewOrdersTrackerService {
         try {
           this.tgSenderService.sendMessage(this.generateMessageContent(order));
           this.handledOrders.push(order.id);
+          this.logger.debug(`Message sent for ${order.article}`);
         } catch (error) {}
       }
     }
@@ -67,7 +68,6 @@ export class NewOrdersTrackerService {
   extractProductName(productData: WBContentDataDTO) {
     if (!productData) return 'not founded';
 
-    this.logger.debug(productData);
     const productName: string | undefined = productData.characteristics
       .filter((el) => Object.keys(el).includes('Наименование'))
       .map((el) => Object.values(el))
