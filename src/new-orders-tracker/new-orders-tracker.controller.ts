@@ -8,7 +8,7 @@ export class NewOrdersTrackerController {
   ) {}
 
   @Get()
-  async getSome() {
-    return this.newOrdersTrackerService.checkNewOrders();
+  async getOrders() {
+    return this.newOrdersTrackerService.requestNewOrders();
   }
 }

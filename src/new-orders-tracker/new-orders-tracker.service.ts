@@ -4,6 +4,11 @@ import { WBNewOrderDetails } from 'src/wb-api/interfaces/wb-new-order-details.in
 import { WBOrdersDataDTO } from 'src/wb-api/interfaces/wb-orders-response.interface';
 import { WBContentDataDTO } from 'src/wb-api/interfaces/wb-product-response.interface';
 import { WbApiService } from 'src/wb-api/wb-api.service';
+import {
+  LINE_DIVIDER_TG,
+  LINE_DIVIDER_WEB,
+  NO_ORDERS_MESSAGE,
+} from 'src/constants/messageText';
 
 @Injectable()
 export class NewOrdersTrackerService {
@@ -14,12 +19,30 @@ export class NewOrdersTrackerService {
     private readonly tgSenderService: TgSenderService,
   ) {}
 
-  async checkNewOrders() {
+  async getNewOrders() {
     const orders = await this.wbApiService.getNewOrders();
+
     if (orders.length === 0) {
-      this.logger.debug('No new orders');
+      this.logger.debug(NO_ORDERS_MESSAGE);
+      return null;
     } else {
       const ordersData = await this.fillProductNames(orders);
+      return ordersData;
+    }
+  }
+
+  async requestNewOrders() {
+    const ordersData = await this.getNewOrders();
+
+    return ordersData !== null
+      ? this.generateResponseData(ordersData)
+      : NO_ORDERS_MESSAGE;
+  }
+
+  async checkNewOrders() {
+    const ordersData = await this.getNewOrders();
+
+    if (ordersData !== null) {
       this.handleNewOrders(ordersData);
     }
   }
@@ -55,14 +78,17 @@ export class NewOrdersTrackerService {
     }
   }
 
-  generateMessageContent(orderDetails: WBNewOrderDetails) {
+  generateMessageContent(
+    orderDetails: WBNewOrderDetails,
+    divider = LINE_DIVIDER_TG,
+  ) {
     const lines = [
       `Новый заказ на Wildberries`,
       `На сумму ${orderDetails.price / 100} руб.`,
       `Состав заказа: ${orderDetails.name}`,
       `Артикул: ${orderDetails.article}`,
     ];
-    return lines.join('%0A');
+    return lines.join(divider);
   }
 
   extractProductName(productData: WBContentDataDTO) {
@@ -75,5 +101,14 @@ export class NewOrdersTrackerService {
       .pop();
 
     return productName || 'not founded';
+  }
+
+  generateResponseData(orders: Array<WBNewOrderDetails>) {
+    const response: string[] = [];
+
+    for (const order of orders) {
+      response.push(this.generateMessageContent(order, LINE_DIVIDER_WEB));
+    }
+    return response.join('\n');
   }
 }
