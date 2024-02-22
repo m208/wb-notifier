@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { LINE_DIVIDER_TG } from 'src/constants/messageText';
 import { TgSenderService } from 'src/tg-sender/tg-sender.service';
 
 const DAYS_BEFORE_WARN = 30;
@@ -11,12 +12,13 @@ export class TokenExpiresTrackerService {
     private readonly tgSenderService: TgSenderService,
   ) {}
 
-  checkToken() {
-    const decodedJwtAccessToken = this.jwtService.decode(
-      process.env.WB_API_TOKEN,
-    );
+  getTokenExpiringDate() {
+    const token = this.jwtService.decode(process.env.WB_API_TOKEN);
+    return new Date(token.exp * 1000);
+  }
 
-    const expiringDate = new Date(decodedJwtAccessToken.exp * 1000);
+  checkToken() {
+    const expiringDate = this.getTokenExpiringDate();
     const timeLeft = expiringDate.getTime() - new Date().getTime();
     const daysLeft = timeLeft / (1000 * 60 * 60 * 24);
 
@@ -32,6 +34,11 @@ export class TokenExpiresTrackerService {
       `Необходимо обновить токен API Wildberries`,
       `Токен действителен до ${expiringDate.toLocaleDateString('ru-RU')}`,
     ];
-    return lines.join('%0A');
+    return lines.join(LINE_DIVIDER_TG);
+  }
+
+  getTokenExpiresData() {
+    return `Токен действителен до 
+             ${this.getTokenExpiringDate().toLocaleDateString('ru-RU')}`;
   }
 }
