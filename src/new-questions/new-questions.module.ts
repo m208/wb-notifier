@@ -8,5 +8,6 @@ import { WbApiModule } from 'src/wb-api/wb-api.module';
   imports: [WbApiModule, TgSenderModule],
   controllers: [NewQuestionsController],
   providers: [NewQuestionsService],
+  exports: [NewQuestionsService],
 })
 export class NewQuestionsModule {}

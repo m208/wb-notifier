@@ -7,6 +7,6 @@ export class NewQuestionsController {
 
   @Get()
   async getTokenData() {
-    return this.newQuestionsService.getNewQuestions();
+    return this.newQuestionsService.requestNewQuestions();
   }
 }
