@@ -1,13 +1,18 @@
 import { HttpService } from '@nestjs/axios';
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, Logger } from '@nestjs/common';
 import { AxiosError } from 'axios';
 import { firstValueFrom, catchError } from 'rxjs';
 import { wbApiLinks } from 'src/constants/apiLinks';
 import { WbAPIOrdersResponse } from './interfaces/wb-orders-response.interface';
 import { WbAPIContentResponse } from './interfaces/wb-product-response.interface';
+import {
+  WBQuestionsRequestParams,
+  WBQuestionsResponse,
+} from './interfaces/wb-questions.interface';
 
 @Injectable()
 export class WbApiService {
+  private readonly logger = new Logger(WbApiService.name);
   constructor(private readonly httpService: HttpService) {}
 
   setAuthHeaders() {
@@ -46,6 +51,23 @@ export class WbApiService {
           }),
         ),
     );
+    return data.data;
+  }
+
+  async getQuestionsList(params: WBQuestionsRequestParams) {
+    const { data } = await firstValueFrom(
+      this.httpService
+        .get<WBQuestionsResponse>(wbApiLinks.getQuestions, {
+          headers: this.setAuthHeaders(),
+          params: params,
+        })
+        .pipe(
+          catchError((error: AxiosError) => {
+            throw new HttpException(error.response.data, error.response.status);
+          }),
+        ),
+    );
+
     return data.data;
   }
 }

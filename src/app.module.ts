@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TgSenderModule } from './tg-sender/tg-sender.module';
 import { NewOrdersTrackerModule } from './new-orders-tracker/new-orders-tracker.module';
 import { TokenExpiresTrackerModule } from './token-expires-tracker/token-expires-tracker.module';
+import { NewQuestionsModule } from './new-questions/new-questions.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { TokenExpiresTrackerModule } from './token-expires-tracker/token-expires
     TgSenderModule,
     NewOrdersTrackerModule,
     TokenExpiresTrackerModule,
+    NewQuestionsModule,
   ],
   providers: [AppService],
 })
