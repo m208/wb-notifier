@@ -8,6 +8,7 @@ import { TgSenderModule } from './tg-sender/tg-sender.module';
 import { NewOrdersTrackerModule } from './new-orders-tracker/new-orders-tracker.module';
 import { TokenExpiresTrackerModule } from './token-expires-tracker/token-expires-tracker.module';
 import { NewQuestionsModule } from './new-questions/new-questions.module';
+import { NewFeedbacksTrackerModule } from './new-feedbacks-tracker/new-feedbacks-tracker.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { NewQuestionsModule } from './new-questions/new-questions.module';
     NewOrdersTrackerModule,
     TokenExpiresTrackerModule,
     NewQuestionsModule,
+    NewFeedbacksTrackerModule,
   ],
   providers: [AppService],
 })

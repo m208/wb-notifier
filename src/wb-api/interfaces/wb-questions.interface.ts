@@ -1,18 +1,10 @@
 // https://openapi.wildberries.ru/feedbacks-questions/api/ru/#tag/Voprosy/paths/~1api~1v1~1questions/get
 
+import { WBFeedbacksAndQuestionsResponse } from './wb-feedbacks-and-questions.interface';
 import { WBProductDetails } from './wb-product-details.interface';
 
-export interface WBQuestionsRequestParams {
-  isAnswered: boolean;
-  take: number;
-  skip: number;
-}
-
-export interface WBQuestionsResponse {
+export interface WBQuestionsResponse extends WBFeedbacksAndQuestionsResponse {
   data: WBQuestionsResponseData;
-  error: boolean;
-  errorText: string;
-  additionalErrors: null | Array<string>;
 }
 
 export interface WBQuestionsResponseData {

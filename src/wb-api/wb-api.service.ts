@@ -5,10 +5,9 @@ import { firstValueFrom, catchError } from 'rxjs';
 import { wbApiLinks } from 'src/constants/apiLinks';
 import { WbAPIOrdersResponse } from './interfaces/wb-orders-response.interface';
 import { WbAPIContentResponse } from './interfaces/wb-product-response.interface';
-import {
-  WBQuestionsRequestParams,
-  WBQuestionsResponse,
-} from './interfaces/wb-questions.interface';
+import { WBQuestionsResponse } from './interfaces/wb-questions.interface';
+import { WBFeedbacksAndQuestionsRequestParams } from './interfaces/wb-feedbacks-and-questions.interface';
+import { WBFeedbacksResponse } from './interfaces/wb-feedbacks.interface';
 
 @Injectable()
 export class WbApiService {
@@ -54,10 +53,27 @@ export class WbApiService {
     return data.data;
   }
 
-  async getQuestionsList(params: WBQuestionsRequestParams) {
+  async getQuestionsList(params: WBFeedbacksAndQuestionsRequestParams) {
     const { data } = await firstValueFrom(
       this.httpService
         .get<WBQuestionsResponse>(wbApiLinks.getQuestions, {
+          headers: this.setAuthHeaders(),
+          params: params,
+        })
+        .pipe(
+          catchError((error: AxiosError) => {
+            throw new HttpException(error.response.data, error.response.status);
+          }),
+        ),
+    );
+
+    return data.data;
+  }
+
+  async getFeedbacksList(params: WBFeedbacksAndQuestionsRequestParams) {
+    const { data } = await firstValueFrom(
+      this.httpService
+        .get<WBFeedbacksResponse>(wbApiLinks.getFeedbacks, {
           headers: this.setAuthHeaders(),
           params: params,
         })
