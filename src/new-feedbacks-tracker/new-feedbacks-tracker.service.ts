@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   LINE_DIVIDER_TG,
   NEW_FEEDBACKS_COUNT_MESSAGE,
@@ -19,6 +19,7 @@ export const requestFandQParams: WBFeedbacksAndQuestionsRequestParams = {
 
 @Injectable()
 export class NewFeedbacksTrackerService {
+  private readonly logger = new Logger(NewFeedbacksTrackerService.name);
   private handledFeedbacks: Array<string> = [];
 
   constructor(
@@ -54,6 +55,9 @@ export class NewFeedbacksTrackerService {
             this.generateMessageContent(feedback),
           );
           this.handledFeedbacks.push(feedback.id);
+          this.logger.log(
+            `Message sent for new feedback. Product: ${feedback.productDetails.supplierArticle}`,
+          );
         } catch (error) {}
       }
     }

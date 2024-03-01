@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { NewFeedbacksTrackerService } from 'src/new-feedbacks-tracker/new-feedbacks-tracker.service';
 import { NewOrdersTrackerService } from 'src/new-orders-tracker/new-orders-tracker.service';
@@ -7,7 +7,6 @@ import { TokenExpiresTrackerService } from 'src/token-expires-tracker/token-expi
 
 @Injectable()
 export class SchedulerService {
-  private readonly logger = new Logger(SchedulerService.name);
   constructor(
     private readonly trackingService: NewOrdersTrackerService,
     private readonly tokenService: TokenExpiresTrackerService,

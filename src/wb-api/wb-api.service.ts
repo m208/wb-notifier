@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { HttpException, Injectable, Logger } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { AxiosError } from 'axios';
 import { firstValueFrom, catchError } from 'rxjs';
 import { wbApiLinks } from 'src/constants/apiLinks';
@@ -17,7 +17,6 @@ import {
 
 @Injectable()
 export class WbApiService {
-  private readonly logger = new Logger(WbApiService.name);
   constructor(private readonly httpService: HttpService) {}
 
   setAuthHeaders() {

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   LINE_DIVIDER_TG,
   NEW_QUESTIONS_COUNT_MESSAGE,
@@ -10,6 +10,7 @@ import { WbApiService } from 'src/wb-api/wb-api.service';
 
 @Injectable()
 export class NewQuestionsService {
+  private readonly logger = new Logger(NewQuestionsService.name);
   private handledQuestions: Array<string> = [];
 
   constructor(
@@ -45,6 +46,9 @@ export class NewQuestionsService {
             this.generateMessageContent(question),
           );
           this.handledQuestions.push(question.id);
+          this.logger.log(
+            `Message sent for new question. Product: ${question.productDetails.supplierArticle}`,
+          );
         } catch (error) {}
       }
     }
