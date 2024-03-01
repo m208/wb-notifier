@@ -2,14 +2,11 @@ import { Injectable } from '@nestjs/common';
 import {
   LINE_DIVIDER_TG,
   NEW_QUESTIONS_COUNT_MESSAGE,
-  NO_QUESTIONS_MESSAGE,
 } from 'src/constants/messageText';
+import { requestFandQParams } from 'src/new-feedbacks-tracker/new-feedbacks-tracker.service';
 import { TgSenderService } from 'src/tg-sender/tg-sender.service';
 import { WBQuestion } from 'src/wb-api/interfaces/wb-questions.interface';
 import { WbApiService } from 'src/wb-api/wb-api.service';
-
-const GET_QUESTIONS_COUNT = 1000;
-const GET_QUESTIONS_SKIP_NUM = 0;
 
 @Injectable()
 export class NewQuestionsService {
@@ -21,31 +18,21 @@ export class NewQuestionsService {
   ) {}
 
   async getNewQuestions() {
-    const unAnsweredQuestions = await this.wbApiService.getQuestionsList({
-      isAnswered: false,
-      take: GET_QUESTIONS_COUNT,
-      skip: GET_QUESTIONS_SKIP_NUM,
-    });
+    const unAnsweredQuestions =
+      await this.wbApiService.getQuestionsList(requestFandQParams);
 
-    if (unAnsweredQuestions.questions.length === 0) {
-      return null;
-    } else {
-      return unAnsweredQuestions.questions;
-    }
+    return unAnsweredQuestions.questions;
   }
 
   async requestNewQuestions() {
     const questions = await this.getNewQuestions();
-
-    return questions !== null
-      ? `${NEW_QUESTIONS_COUNT_MESSAGE} ${questions.length}`
-      : NO_QUESTIONS_MESSAGE;
+    return `${NEW_QUESTIONS_COUNT_MESSAGE} ${questions.length}`;
   }
 
   async checkNewQuestions() {
     const questions = await this.getNewQuestions();
 
-    if (questions !== null) {
+    if (questions.length > 0) {
       this.handleNewQuestions(questions);
     }
   }

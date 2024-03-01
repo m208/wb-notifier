@@ -2,14 +2,20 @@ import { Injectable } from '@nestjs/common';
 import {
   LINE_DIVIDER_TG,
   NEW_FEEDBACKS_COUNT_MESSAGE,
-  NO_FEEDBACKS_MESSAGE,
 } from 'src/constants/messageText';
 import { TgSenderService } from 'src/tg-sender/tg-sender.service';
+import { WBFeedbacksAndQuestionsRequestParams } from 'src/wb-api/interfaces/wb-feedbacks-and-questions.interface';
 import { WBFeedback } from 'src/wb-api/interfaces/wb-feedbacks.interface';
 import { WbApiService } from 'src/wb-api/wb-api.service';
 
 const GET_FEEDBACKS_COUNT = 1000;
 const GET_FEEDBACKS_SKIP_NUM = 0;
+
+export const requestFandQParams: WBFeedbacksAndQuestionsRequestParams = {
+  isAnswered: false,
+  take: GET_FEEDBACKS_COUNT,
+  skip: GET_FEEDBACKS_SKIP_NUM,
+};
 
 @Injectable()
 export class NewFeedbacksTrackerService {
@@ -21,31 +27,21 @@ export class NewFeedbacksTrackerService {
   ) {}
 
   async getNewFeedbacks() {
-    const unAnsweredFeedbacks = await this.wbApiService.getFeedbacksList({
-      isAnswered: false,
-      take: GET_FEEDBACKS_COUNT,
-      skip: GET_FEEDBACKS_SKIP_NUM,
-    });
+    const unAnsweredFeedbacks =
+      await this.wbApiService.getFeedbacksList(requestFandQParams);
 
-    if (unAnsweredFeedbacks.feedbacks.length === 0) {
-      return null;
-    } else {
-      return unAnsweredFeedbacks.feedbacks;
-    }
+    return unAnsweredFeedbacks.feedbacks;
   }
 
   async requestNewFeedbacks() {
     const feedbacks = await this.getNewFeedbacks();
-
-    return feedbacks !== null
-      ? `${NEW_FEEDBACKS_COUNT_MESSAGE} ${feedbacks.length}`
-      : NO_FEEDBACKS_MESSAGE;
+    return `${NEW_FEEDBACKS_COUNT_MESSAGE} ${feedbacks.length}`;
   }
 
   async checkNewFeedbacks() {
     const feedbacks = await this.getNewFeedbacks();
 
-    if (feedbacks !== null) {
+    if (feedbacks.length > 0) {
       this.handleNewFeedbacks(feedbacks);
     }
   }

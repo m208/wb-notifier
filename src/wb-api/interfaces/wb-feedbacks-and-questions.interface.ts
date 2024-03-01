@@ -9,3 +9,8 @@ export interface WBFeedbacksAndQuestionsResponse {
   errorText: string;
   additionalErrors: null | Array<string>;
 }
+
+export interface WBFeedbacksAndQuestionsResponseData {
+  countUnanswered: number;
+  countArchive: number;
+}
