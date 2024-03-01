@@ -72,7 +72,9 @@ export class NewOrdersTrackerService {
         try {
           this.tgSenderService.sendMessage(this.generateMessageContent(order));
           this.handledOrders.push(order.id);
-          this.logger.debug(`Message sent for ${order.article}`);
+          this.logger.log(
+            `Message sent for new order. Product: ${order.article}`,
+          );
         } catch (error) {}
       }
     }
