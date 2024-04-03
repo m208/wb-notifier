@@ -41,12 +41,22 @@ export class WbApiService {
   }
 
   // Допускается максимум 100 запросов в минуту на методы контента в целом.
-  async getProductContent(productCodes: Array<string>) {
+  // https://openapi.wildberries.ru/content/api/ru/#tag/Prosmotr/paths/~1content~1v2~1get~1cards~1list/post
+  async getProductsList() {
+    const settings = {
+      cursor: {
+        limit: 1000,
+      },
+      filter: {
+        withPhoto: -1,
+      },
+    };
+
     const { data } = await firstValueFrom(
       this.httpService
         .post<WbAPIContentResponse>(
           wbApiLinks.getProducts,
-          { vendorCodes: productCodes },
+          { settings },
           { headers: this.setAuthHeaders() },
         )
         .pipe(
@@ -55,7 +65,12 @@ export class WbApiService {
           }),
         ),
     );
-    return data.data;
+    return data.cards;
+  }
+
+  async getProductContent(productCodes: Array<string>) {
+    const products = await this.getProductsList();
+    return products.filter((el) => productCodes.includes(el.vendorCode));
   }
 
   async getFeedbacksOrQuestionsList(

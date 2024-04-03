@@ -93,16 +93,8 @@ export class NewOrdersTrackerService {
     return lines.join(divider);
   }
 
-  extractProductName(productData: WBContentDataDTO) {
-    if (!productData) return 'not founded';
-
-    const productName: string | undefined = productData.characteristics
-      .filter((el) => Object.keys(el).includes('Наименование'))
-      .map((el) => Object.values(el))
-      .flat()
-      .pop();
-
-    return productName || 'not founded';
+  extractProductName(productData: WBContentDataDTO | undefined) {
+    return productData ? productData.title || 'not founded' : 'not founded';
   }
 
   generateResponseData(orders: Array<WBNewOrderDetails>) {
