@@ -14,8 +14,8 @@ export class SchedulerService {
     private readonly feedbacksService: NewFeedbacksTrackerService,
   ) {}
 
-  @Cron('0 1 * * * *')
-  //  Called every hour, at the start of the 1th minute
+  @Cron('*/30 * * * *')
+  //  Called at every 30th minute
   trackOrders() {
     this.trackingService.checkNewOrders();
   }
