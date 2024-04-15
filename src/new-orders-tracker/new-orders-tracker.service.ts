@@ -21,12 +21,14 @@ export class NewOrdersTrackerService {
 
   async getNewOrders() {
     const orders = await this.wbApiService.getNewOrders();
-
-    if (orders.length === 0) {
+    const newOrders = orders.filter(
+      (order) => !this.handledOrders.includes(order.id),
+    );
+    if (newOrders.length === 0) {
       this.logger.debug(NO_ORDERS_MESSAGE);
       return null;
     } else {
-      const ordersData = await this.fillProductNames(orders);
+      const ordersData = await this.fillProductNames(newOrders);
       return ordersData;
     }
   }
