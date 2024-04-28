@@ -4,7 +4,11 @@ import { AxiosError } from 'axios';
 import { firstValueFrom, catchError } from 'rxjs';
 import { wbApiLinks } from 'src/constants/apiLinks';
 import { WbAPIOrdersResponse } from './interfaces/wb-orders-response.interface';
-import { WbAPIContentResponse } from './interfaces/wb-product-response.interface';
+import {
+  WBContentDataDTO,
+  WBContentResponsePaginator,
+  WbAPIContentResponse,
+} from './interfaces/wb-product-response.interface';
 import {
   WBQuestionsResponse,
   WBQuestionsResponseData,
@@ -14,6 +18,12 @@ import {
   WBFeedbacksResponse,
   WBFeedbacksResponseData,
 } from './interfaces/wb-feedbacks.interface';
+import {
+  PaginatorSettingsParams,
+  WBContentSettingsObject,
+} from './interfaces/wb-product-request-settings.interface';
+
+const ALLOWED_NM_LIMIT_PER_REQUEST = 100;
 
 @Injectable()
 export class WbApiService {
@@ -42,16 +52,7 @@ export class WbApiService {
 
   // Допускается максимум 100 запросов в минуту на методы контента в целом.
   // https://openapi.wildberries.ru/content/api/ru/#tag/Prosmotr/paths/~1content~1v2~1get~1cards~1list/post
-  async getProductsList() {
-    const settings = {
-      cursor: {
-        limit: 1000,
-      },
-      filter: {
-        withPhoto: -1,
-      },
-    };
-
+  async getProductsList(settings: WBContentSettingsObject) {
     const { data } = await firstValueFrom(
       this.httpService
         .post<WbAPIContentResponse>(
@@ -65,11 +66,58 @@ export class WbApiService {
           }),
         ),
     );
-    return data.cards;
+
+    return data;
+  }
+
+  getRequestSettings({ limit, nmID, updatedAt }: PaginatorSettingsParams) {
+    const settings: WBContentSettingsObject = {
+      cursor: {
+        limit,
+        nmID,
+      },
+      filter: {
+        withPhoto: -1,
+      },
+    };
+
+    if (updatedAt) {
+      settings.cursor.updatedAt = updatedAt;
+    }
+
+    return settings;
+  }
+
+  async getProductsListWithPaginator() {
+    const cards: WBContentDataDTO[] = [];
+
+    let paginatorData: WBContentResponsePaginator = {
+      nmID: 0,
+      total: ALLOWED_NM_LIMIT_PER_REQUEST,
+    };
+
+    while (paginatorData.total >= ALLOWED_NM_LIMIT_PER_REQUEST) {
+      try {
+        const data = await this.getProductsList(
+          this.getRequestSettings({
+            limit: ALLOWED_NM_LIMIT_PER_REQUEST,
+            nmID: paginatorData.nmID,
+            updatedAt: paginatorData.updatedAt,
+          }),
+        );
+
+        cards.push(...data.cards);
+        paginatorData = data.cursor;
+      } catch (error) {
+        break;
+      }
+    }
+
+    return cards;
   }
 
   async getProductContent(productCodes: Array<string>) {
-    const products = await this.getProductsList();
+    const products = await this.getProductsListWithPaginator();
     return products.filter((el) => productCodes.includes(el.vendorCode));
   }
 
