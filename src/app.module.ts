@@ -9,6 +9,7 @@ import { NewOrdersTrackerModule } from './new-orders-tracker/new-orders-tracker.
 import { TokenExpiresTrackerModule } from './token-expires-tracker/token-expires-tracker.module';
 import { NewQuestionsModule } from './new-questions/new-questions.module';
 import { NewFeedbacksTrackerModule } from './new-feedbacks-tracker/new-feedbacks-tracker.module';
+import { NewClaimsTrackerModule } from './new-claims-tracker/new-claims-tracker.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { NewFeedbacksTrackerModule } from './new-feedbacks-tracker/new-feedbacks
     TokenExpiresTrackerModule,
     NewQuestionsModule,
     NewFeedbacksTrackerModule,
+    NewClaimsTrackerModule,
   ],
   providers: [AppService],
 })
