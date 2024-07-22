@@ -1,8 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { LINE_DIVIDER_TG, NEW_CLAIMS_MESSAGE } from 'src/constants/messageText';
 import { TgSenderService } from 'src/tg-sender/tg-sender.service';
-import { WBClaimDTO } from 'src/wb-api/interfaces/wb-claims.interface';
+import {
+  WBClaimDTO,
+  WBClaimsRequestParams,
+} from 'src/wb-api/interfaces/wb-claims.interface';
 import { WbApiService } from 'src/wb-api/wb-api.service';
+
+const requestClaimsParams: WBClaimsRequestParams = {
+  is_archive: false,
+};
 
 @Injectable()
 export class NewClaimsTrackerService {
@@ -14,12 +21,12 @@ export class NewClaimsTrackerService {
   ) {}
 
   async requestNewClaims() {
-    const claims = await this.wbApiService.getClaimsList();
+    const claims = await this.getNewClaims();
     return `${NEW_CLAIMS_MESSAGE} ${claims.length}`;
   }
 
   async getNewClaims() {
-    return await this.wbApiService.getClaimsList();
+    return await this.wbApiService.getClaimsList(requestClaimsParams);
   }
 
   async checkNewClaims() {

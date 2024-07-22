@@ -159,11 +159,7 @@ export class WbApiService {
     )) as WBFeedbacksResponseData;
   }
 
-  async getClaimsList() {
-    const params: WBClaimsRequestParams = {
-      is_archive: true,
-    };
-
+  async getClaimsList(params: WBClaimsRequestParams) {
     const { data } = await firstValueFrom(
       this.httpService
         .get<WBClaimsResponse>(wbApiLinks.getClaims, {
