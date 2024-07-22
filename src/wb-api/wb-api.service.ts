@@ -22,6 +22,10 @@ import {
   PaginatorSettingsParams,
   WBContentSettingsObject,
 } from './interfaces/wb-product-request-settings.interface';
+import {
+  WBClaimsRequestParams,
+  WBClaimsResponse,
+} from './interfaces/wb-claims.interface';
 
 const ALLOWED_NM_LIMIT_PER_REQUEST = 100;
 
@@ -153,5 +157,26 @@ export class WbApiService {
       wbApiLinks.getFeedbacks,
       params,
     )) as WBFeedbacksResponseData;
+  }
+
+  async getClaimsList() {
+    const params: WBClaimsRequestParams = {
+      is_archive: true,
+    };
+
+    const { data } = await firstValueFrom(
+      this.httpService
+        .get<WBClaimsResponse>(wbApiLinks.getClaims, {
+          headers: this.setAuthHeaders(),
+          params: params,
+        })
+        .pipe(
+          catchError((error: AxiosError) => {
+            throw new HttpException(error.response.data, error.response.status);
+          }),
+        ),
+    );
+
+    return data.claims;
   }
 }
