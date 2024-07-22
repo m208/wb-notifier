@@ -8,5 +8,6 @@ import { WbApiModule } from 'src/wb-api/wb-api.module';
   imports: [WbApiModule, TgSenderModule],
   controllers: [NewClaimsTrackerController],
   providers: [NewClaimsTrackerService],
+  exports: [NewClaimsTrackerService],
 })
 export class NewClaimsTrackerModule {}
