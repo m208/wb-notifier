@@ -68,8 +68,11 @@ export class NewFeedbacksTrackerService {
       `Новый отзыв на Wildberries`,
       `${feedback.productDetails.productName} | (${feedback.productDetails.supplierArticle})`,
       `Оценка: ${`\u2B50 `.repeat(feedback.productValuation)}`,
-      `${feedback.text}`,
+      `${feedback.cons ? `Недостатки: ${feedback.cons}` : ''}`,
+      `${feedback.pros ? `Достоинства: ${feedback.pros}` : ''}`,
+      `${feedback.text ? `Комментарий: ${feedback.text}` : ''}`,
+      `${feedback.photoLinks ? `Приложено фото` : ''}`,
     ];
-    return lines.join(divider);
+    return lines.filter((el) => !!el).join(divider);
   }
 }

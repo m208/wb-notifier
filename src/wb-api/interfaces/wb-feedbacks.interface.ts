@@ -17,4 +17,12 @@ export interface WBFeedbacksResponseData
 
 export interface WBFeedback extends WBQuestion {
   productValuation: number;
+  pros: string;
+  cons: string;
+  photoLinks: Array<WBFeedbackPhotos> | null;
 }
+
+type WBFeedbackPhotos = {
+  fullSize: string;
+  miniSize: string;
+};
