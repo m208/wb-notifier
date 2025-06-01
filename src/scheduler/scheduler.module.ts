@@ -5,6 +5,7 @@ import { TokenExpiresTrackerModule } from 'src/token-expires-tracker/token-expir
 import { NewQuestionsModule } from 'src/new-questions/new-questions.module';
 import { NewFeedbacksTrackerModule } from 'src/new-feedbacks-tracker/new-feedbacks-tracker.module';
 import { NewClaimsTrackerModule } from 'src/new-claims-tracker/new-claims-tracker.module';
+import { NewChatsModule } from 'src/new-chats/new-chats.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { NewClaimsTrackerModule } from 'src/new-claims-tracker/new-claims-tracke
     NewQuestionsModule,
     NewFeedbacksTrackerModule,
     NewClaimsTrackerModule,
+    NewChatsModule,
   ],
   providers: [SchedulerService],
 })

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
+import { NewChatsService } from 'src/new-chats/new-chats.service';
 import { NewClaimsTrackerService } from 'src/new-claims-tracker/new-claims-tracker.service';
 import { NewFeedbacksTrackerService } from 'src/new-feedbacks-tracker/new-feedbacks-tracker.service';
 import { NewOrdersTrackerService } from 'src/new-orders-tracker/new-orders-tracker.service';
@@ -14,6 +15,7 @@ export class SchedulerService {
     private readonly questionsService: NewQuestionsService,
     private readonly feedbacksService: NewFeedbacksTrackerService,
     private readonly claimsService: NewClaimsTrackerService,
+    private readonly chatsService: NewChatsService,
   ) {}
 
   @Cron('*/30 * * * *')
@@ -40,6 +42,12 @@ export class SchedulerService {
   //  Called every hour, at the start of the 4th minute
   trackReturnClaims() {
     this.claimsService.checkNewClaims();
+  }
+
+  @Cron('* 5 * * *')
+  //  Called every hour, at the start of the 5th minute
+  trackNewChatMessages() {
+    this.chatsService.checkNewChatMessages();
   }
 
   @Cron('0 0 10 * * *')

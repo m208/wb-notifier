@@ -4,4 +4,5 @@ export const wbApiLinks = {
   getQuestions: `https://feedbacks-api.wildberries.ru/api/v1/questions`,
   getFeedbacks: `https://feedbacks-api.wildberries.ru/api/v1/feedbacks`,
   getClaims: `https://returns-api.wildberries.ru/api/v1/claims`,
+  getChats: `https://buyer-chat-api.wildberries.ru/api/v1/seller/events`,
 };
