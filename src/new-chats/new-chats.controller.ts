@@ -7,6 +7,6 @@ export class NewChatsController {
 
   @Get()
   GetNewChatMessages() {
-    return this.newChatsService.getNewChatMessages();
+    return this.newChatsService.requestChatMessages();
   }
 }

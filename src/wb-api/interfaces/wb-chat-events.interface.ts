@@ -20,14 +20,8 @@ export interface WBChatEvent {
   eventID: string;
   eventType: 'message' | 'refund';
   isNewChat: boolean;
-  message?: WBMessage;
-  source:
-    | 'seller-portal'
-    | 'seller-public-api'
-    | 'ruSite'
-    | 'global'
-    | 'ios'
-    | 'android';
+  message: WBMessage;
+  source: string;
   addTimestamp: number;
   addTime: string;
   replySign?: string;
@@ -37,11 +31,34 @@ export interface WBChatEvent {
 }
 
 type WBMessage = {
-  text: string;
+  attachments?: {
+    goodCard?: WBMessageAttachedCard;
+    images?: Array<WBMessageAttachedImages>;
+  };
+  text?: string;
+};
+
+type WBMessageAttachedCard = {
+  date: string;
+  needRefund: boolean;
+  nmID: number;
+  price: number;
+  priceCurrency: string;
+  rid: string;
+  size: string;
+  statusID: number;
+};
+
+type WBMessageAttachedImages = {
+  date: string;
+  url: string;
 };
 
 export interface WBChatMessage {
+  chatId: string;
   isNewChat: boolean;
   clientName: string;
-  message: string;
+  productId: number | null;
+  photoAttached: boolean;
+  messages: string[];
 }
