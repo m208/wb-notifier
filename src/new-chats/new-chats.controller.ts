@@ -6,7 +6,7 @@ export class NewChatsController {
   constructor(private readonly newChatsService: NewChatsService) {}
 
   @Get()
-  findAll() {
-    return this.newChatsService.findAll();
+  GetNewChatMessages() {
+    return this.newChatsService.getNewChatMessages();
   }
 }

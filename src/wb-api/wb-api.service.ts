@@ -26,6 +26,10 @@ import {
   WBClaimsRequestParams,
   WBClaimsResponse,
 } from './interfaces/wb-claims.interface';
+import {
+  WBChatEventsRequestParams,
+  WBChatEventsSuccessResponse,
+} from './interfaces/wb-chat-events.interface';
 
 const ALLOWED_NM_LIMIT_PER_REQUEST = 100;
 
@@ -174,5 +178,23 @@ export class WbApiService {
     );
 
     return data.claims;
+  }
+
+  // !  Maximum of 10 requests per 10 seconds per one seller's account  !
+  async getChatEvents(params: WBChatEventsRequestParams) {
+    const { data } = await firstValueFrom(
+      this.httpService
+        .get<WBChatEventsSuccessResponse>(wbApiLinks.getChats, {
+          headers: this.setAuthHeaders(),
+          params: params,
+        })
+        .pipe(
+          catchError((error: AxiosError) => {
+            throw new HttpException(error.response.data, error.response.status);
+          }),
+        ),
+    );
+
+    return data.result.events;
   }
 }
