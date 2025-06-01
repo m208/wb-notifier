@@ -11,11 +11,18 @@ import { NewQuestionsModule } from './new-questions/new-questions.module';
 import { NewFeedbacksTrackerModule } from './new-feedbacks-tracker/new-feedbacks-tracker.module';
 import { NewClaimsTrackerModule } from './new-claims-tracker/new-claims-tracker.module';
 import { NewChatsModule } from './new-chats/new-chats.module';
+import { FrontendModule } from './frontend/frontend.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env',
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      serveRoot: '/static',
     }),
     ScheduleModule.forRoot(),
     SchedulerModule,
@@ -27,6 +34,7 @@ import { NewChatsModule } from './new-chats/new-chats.module';
     NewFeedbacksTrackerModule,
     NewClaimsTrackerModule,
     NewChatsModule,
+    FrontendModule,
   ],
   providers: [AppService],
 })
