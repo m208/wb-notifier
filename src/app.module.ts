@@ -15,6 +15,11 @@ import { FrontendModule } from './frontend/frontend.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AccessVariables } from './entities/access-variables.entity';
+import { Settings } from './entities/settings.entity';
+import { User } from './entities/user.entity';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -23,6 +28,12 @@ import { join } from 'path';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/static',
+    }),
+    TypeOrmModule.forRoot({
+      type: 'sqlite',
+      database: 'app.db',
+      entities: [User, Settings, AccessVariables],
+      synchronize: true,
     }),
     ScheduleModule.forRoot(),
     SchedulerModule,
