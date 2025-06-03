@@ -1,5 +1,6 @@
 # SQLite database
-app.db
+*.db
+*.db-journal
 
 # .env file
 .env
