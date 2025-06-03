@@ -17,7 +17,7 @@ export class UsersService implements OnModuleInit {
       const hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
       await this.repo.save(
         this.repo.create({
-          username: 'admin',
+          username: process.env.ADMIN_USERNAME,
           passwordHash: hash,
         }),
       );
