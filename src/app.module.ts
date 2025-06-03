@@ -19,6 +19,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AccessVariables } from './entities/access-variables.entity';
 import { Settings } from './entities/settings.entity';
 import { User } from './entities/user.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { User } from './entities/user.entity';
     NewClaimsTrackerModule,
     NewChatsModule,
     FrontendModule,
+    AuthModule,
   ],
   providers: [AppService],
 })
