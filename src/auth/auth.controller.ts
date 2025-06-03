@@ -10,11 +10,13 @@ export class AuthController {
   @Post('login')
   async login(@Body() dto: LoginDto, @Res() res: Response) {
     const token = await this.authService.login(dto);
+
     if (!token) {
-      return res.status(401).send('Invalid credentials');
+      return res.status(401).send('Неверный логин или пароль');
     }
+
     res.cookie('token', token, { httpOnly: true });
-    res.redirect('/');
+    res.redirect('/settings');
   }
 
   @Post('logout')

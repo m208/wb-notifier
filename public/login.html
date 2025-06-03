@@ -12,14 +12,28 @@
   <body>
     <main class="container">
       <h1>Вход в панель управления</h1>
-      <form id="login-form">
+      <form id="login-form" action="/auth/login" method="post">
         <label for="username">Имя пользователя</label>
-        <input type="text" id="username" required placeholder="admin" />
+        <input
+          type="text"
+          name="username"
+          autocomplete="username"
+          required
+          placeholder="user"
+        />
 
         <label for="password">Пароль</label>
-        <input type="password" id="password" required placeholder="••••••••" />
+        <input
+          type="password"
+          name="password"
+          autocomplete="password"
+          required
+          placeholder="••••••••"
+        />
 
         <button type="submit">Войти</button>
+
+        <p id="error-message" style="color: red"></p>
       </form>
     </main>
 

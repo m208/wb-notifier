@@ -1,18 +1,28 @@
-import { Controller, Get, Res, UseGuards } from '@nestjs/common';
-import { Response } from 'express';
+import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import { Response, Request } from 'express';
 import { join } from 'path';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller()
 export class FrontendController {
+  constructor(private readonly authService: AuthService) {}
+
   @Get('/')
   root(@Res() res: Response) {
-    res.redirect('/login');
+    res.redirect('/settings');
   }
 
   @Get('/login')
-  getLogin(@Res() res: Response) {
-    res.sendFile(join(__dirname, '..', '..', 'public', 'login.html'));
+  getLogin(@Req() req: Request, @Res() res: Response) {
+    const token = req.cookies?.token;
+    const user = this.authService.verify(token);
+
+    if (user) {
+      return res.redirect('/settings');
+    }
+
+    return res.sendFile(join(__dirname, '..', '..', 'public', 'login.html'));
   }
 
   @UseGuards(AuthGuard)
