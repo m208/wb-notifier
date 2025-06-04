@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AccessVariables } from 'src/entities/access-variables.entity';
 import { Repository } from 'typeorm';
 import { UpdateAccessDataDto } from './dto/update-access-data.dto';
+import { encrypt } from 'src/utils/crypto';
 
 @Injectable()
 export class SettingsService {
@@ -38,15 +39,17 @@ export class SettingsService {
       throw new NotFoundException('Config entry not found!');
     }
 
+    const encrypted = encrypt(dto.value);
+
     switch (dto.field) {
       case 'tg-token':
-        record.tgToken = dto.value;
+        record.tgToken = encrypted;
         break;
       case 'tg-chat-id':
-        record.tgChatId = dto.value;
+        record.tgChatId = encrypted;
         break;
       case 'wb-token':
-        record.wbToken = dto.value;
+        record.wbToken = encrypted;
         break;
       default:
         throw new BadRequestException(`Invalid field: ${dto.field}`);
