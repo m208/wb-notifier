@@ -20,6 +20,7 @@ import { AccessVariables } from './entities/access-variables.entity';
 import { Settings } from './entities/settings.entity';
 import { User } from './entities/user.entity';
 import { AuthModule } from './auth/auth.module';
+import { SettingsModule } from './settings/settings.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { AuthModule } from './auth/auth.module';
     NewChatsModule,
     FrontendModule,
     AuthModule,
+    SettingsModule,
   ],
   providers: [AppService],
 })

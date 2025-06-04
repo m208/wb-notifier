@@ -1,13 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class AccessVariables {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn()
+  id: number = 1;
 
   @Column()
-  accessToken: string;
+  wbToken: string;
 
   @Column()
   tgToken: string;
+
+  @Column()
+  tgChatId: string;
 }
