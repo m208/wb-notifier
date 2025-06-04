@@ -14,14 +14,18 @@ export class UsersService implements OnModuleInit {
   async onModuleInit() {
     const count = await this.repo.count();
     if (count === 0) {
-      const hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
-      await this.repo.save(
-        this.repo.create({
-          username: process.env.ADMIN_USERNAME,
-          passwordHash: hash,
-        }),
-      );
-      console.log('✅ Created default admin user');
+      if (!process.env.ADMIN_USERNAME || !process.env.ADMIN_PASSWORD) {
+        console.log('❌ admin user not created! Set ENV variables!');
+      } else {
+        const hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
+        await this.repo.save(
+          this.repo.create({
+            username: process.env.ADMIN_USERNAME,
+            passwordHash: hash,
+          }),
+        );
+        console.log('✅ Created default admin user');
+      }
     }
   }
 
