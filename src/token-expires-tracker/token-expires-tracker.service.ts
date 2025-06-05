@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LINE_DIVIDER_TG } from 'src/constants/messageText';
+import { SettingsService } from 'src/settings/settings.service';
 import { TgSenderService } from 'src/tg-sender/tg-sender.service';
 
 const DAYS_BEFORE_WARN = 30;
@@ -10,15 +11,21 @@ export class TokenExpiresTrackerService {
   constructor(
     private jwtService: JwtService,
     private readonly tgSenderService: TgSenderService,
+    private readonly settingsService: SettingsService,
   ) {}
 
-  getTokenExpiringDate() {
-    const token = this.jwtService.decode(process.env.WB_API_TOKEN);
-    return new Date(token.exp * 1000);
+  async getTokenExpiringDate() {
+    const accessData = await this.settingsService.getWbAccessData();
+    const token = accessData ? accessData.token : '';
+
+    const decodedToken = this.jwtService.decode(token);
+
+    return decodedToken ? new Date(decodedToken.exp * 1000) : new Date(0);
   }
 
-  checkToken() {
-    const expiringDate = this.getTokenExpiringDate();
+  async checkToken() {
+    const expiringDate = await this.getTokenExpiringDate();
+
     const timeLeft = expiringDate.getTime() - new Date().getTime();
     const daysLeft = timeLeft / (1000 * 60 * 60 * 24);
 
@@ -37,8 +44,10 @@ export class TokenExpiresTrackerService {
     return lines.join(LINE_DIVIDER_TG);
   }
 
-  getTokenExpiresData() {
-    return `Токен действителен до 
-             ${this.getTokenExpiringDate().toLocaleDateString('ru-RU')}`;
+  async getTokenExpiresData() {
+    const expiringDate = (await this.getTokenExpiringDate()).toLocaleDateString(
+      'ru-RU',
+    );
+    return `Токен действителен до ${expiringDate}`;
   }
 }
