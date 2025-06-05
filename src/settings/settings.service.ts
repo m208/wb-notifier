@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AccessVariables } from 'src/entities/access-variables.entity';
 import { Repository } from 'typeorm';
 import { UpdateAccessDataDto } from './dto/update-access-data.dto';
-import { encrypt } from 'src/utils/crypto';
+import { decrypt, encrypt } from 'src/utils/crypto';
 
 @Injectable()
 export class SettingsService {
@@ -32,10 +32,21 @@ export class SettingsService {
     }
   }
 
-  async updateAccessDataField(dto: UpdateAccessDataDto) {
-    const record = await this.accessDataRepo.findOneBy({ id: 1 });
+  async getTelegramAccessData() {
+    const entry = await this.accessDataRepo.findOneBy({ id: 1 });
 
-    if (!record) {
+    if (entry) {
+      return {
+        'tg-token': decrypt(entry.tgToken),
+        'tg-chat-id': decrypt(entry.tgChatId),
+      };
+    }
+  }
+
+  async updateAccessDataField(dto: UpdateAccessDataDto) {
+    const entry = await this.accessDataRepo.findOneBy({ id: 1 });
+
+    if (!entry) {
       throw new NotFoundException('Config entry not found!');
     }
 
@@ -43,19 +54,19 @@ export class SettingsService {
 
     switch (dto.field) {
       case 'tg-token':
-        record.tgToken = encrypted;
+        entry.tgToken = encrypted;
         break;
       case 'tg-chat-id':
-        record.tgChatId = encrypted;
+        entry.tgChatId = encrypted;
         break;
       case 'wb-token':
-        record.wbToken = encrypted;
+        entry.wbToken = encrypted;
         break;
       default:
         throw new BadRequestException(`Invalid field: ${dto.field}`);
     }
 
-    await this.accessDataRepo.save(record);
+    await this.accessDataRepo.save(entry);
 
     return {
       message: `${dto.field} updated`,

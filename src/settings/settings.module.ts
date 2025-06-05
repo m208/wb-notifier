@@ -8,5 +8,6 @@ import { AccessVariables } from 'src/entities/access-variables.entity';
   imports: [TypeOrmModule.forFeature([AccessVariables])],
   controllers: [SettingsController],
   providers: [SettingsService],
+  exports: [SettingsService],
 })
 export class SettingsModule {}

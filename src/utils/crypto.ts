@@ -16,6 +16,8 @@ export function encrypt(text: string): string {
 }
 
 export function decrypt(encrypted: string): string {
+  if (encrypted.length === 0) return encrypted;
+
   const decipher = crypto.createDecipheriv(algorithm, key, iv);
   let decrypted = decipher.update(encrypted, 'hex', 'utf8');
   decrypted += decipher.final('utf8');
