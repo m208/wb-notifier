@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, Logger } from '@nestjs/common';
 import { AxiosError } from 'axios';
 import { firstValueFrom, catchError } from 'rxjs';
 import { wbApiLinks } from 'src/constants/apiLinks';
@@ -36,6 +36,7 @@ const ALLOWED_NM_LIMIT_PER_REQUEST = 100;
 
 @Injectable()
 export class WbApiService {
+  private readonly logger = new Logger(WbApiService.name);
   constructor(
     private readonly httpService: HttpService,
     private readonly settingsService: SettingsService,
@@ -50,6 +51,13 @@ export class WbApiService {
     };
   }
 
+  errorHandler(error: AxiosError) {
+    this.logger.error('Request failed:', error.message);
+    const status = error.response?.status || 500;
+    const message = error.response?.data || 'Unknown error occurred';
+    throw new HttpException(message, status);
+  }
+
   async getNewOrders() {
     const { data } = await firstValueFrom(
       this.httpService
@@ -58,7 +66,8 @@ export class WbApiService {
         })
         .pipe(
           catchError((error: AxiosError) => {
-            throw new HttpException(error.response.data, error.response.status);
+            this.errorHandler(error);
+            return [];
           }),
         ),
     );
@@ -77,7 +86,8 @@ export class WbApiService {
         )
         .pipe(
           catchError((error: AxiosError) => {
-            throw new HttpException(error.response.data, error.response.status);
+            this.errorHandler(error);
+            return [];
           }),
         ),
     );
@@ -148,7 +158,8 @@ export class WbApiService {
         })
         .pipe(
           catchError((error: AxiosError) => {
-            throw new HttpException(error.response.data, error.response.status);
+            this.errorHandler(error);
+            return [];
           }),
         ),
     );
@@ -179,7 +190,8 @@ export class WbApiService {
         })
         .pipe(
           catchError((error: AxiosError) => {
-            throw new HttpException(error.response.data, error.response.status);
+            this.errorHandler(error);
+            return [];
           }),
         ),
     );
@@ -197,7 +209,8 @@ export class WbApiService {
         })
         .pipe(
           catchError((error: AxiosError) => {
-            throw new HttpException(error.response.data, error.response.status);
+            this.errorHandler(error);
+            return [];
           }),
         ),
     );
