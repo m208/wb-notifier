@@ -1,11 +1,12 @@
 import { HttpService } from '@nestjs/axios';
-import { HttpException, Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { AxiosError } from 'axios';
-import { firstValueFrom, catchError } from 'rxjs';
+import { firstValueFrom, catchError, of } from 'rxjs';
 import { SettingsService } from 'src/settings/settings.service';
 
 @Injectable()
 export class TgSenderService {
+  private readonly logger = new Logger(TgSenderService.name);
   constructor(
     private readonly httpService: HttpService,
     private readonly settingsService: SettingsService,
@@ -15,16 +16,18 @@ export class TgSenderService {
     const accessData = await this.settingsService.getTelegramAccessData();
     if (!accessData) return;
 
-    const { data } = await firstValueFrom(
-      this.httpService
-        .get<unknown>(
-          `https://api.telegram.org/bot${accessData['tg-token']}/sendMessage?chat_id=${accessData['tg-chat-id']}&text=${message}`,
-        )
-        .pipe(
-          catchError((error: AxiosError) => {
-            throw new HttpException(error.response.data, error.response.status);
-          }),
-        ),
+    const url = `https://api.telegram.org/bot${accessData['tg-token']}/sendMessage?chat_id=${accessData['tg-chat-id']}&text=${message}`;
+
+    const data = await firstValueFrom(
+      this.httpService.get<unknown>(url).pipe(
+        catchError((error: AxiosError) => {
+          this.logger.error('Telegram API error:', {
+            status: error.response?.status,
+            description: error.message,
+          });
+          return of(null);
+        }),
+      ),
     );
 
     return data;
