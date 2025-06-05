@@ -30,16 +30,23 @@ import {
   WBChatEventsRequestParams,
   WBChatEventsSuccessResponse,
 } from './interfaces/wb-chat-events.interface';
+import { SettingsService } from 'src/settings/settings.service';
 
 const ALLOWED_NM_LIMIT_PER_REQUEST = 100;
 
 @Injectable()
 export class WbApiService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly settingsService: SettingsService,
+  ) {}
 
-  setAuthHeaders() {
+  async setAuthHeaders() {
+    const accessData = await this.settingsService.getWbAccessData();
+    const token = accessData ? accessData.token : '';
+
     return {
-      Authorization: `Bearer ${process.env.WB_API_TOKEN}`,
+      Authorization: `Bearer ${token}`,
     };
   }
 
@@ -47,7 +54,7 @@ export class WbApiService {
     const { data } = await firstValueFrom(
       this.httpService
         .get<WbAPIOrdersResponse>(wbApiLinks.getOrders, {
-          headers: this.setAuthHeaders(),
+          headers: await this.setAuthHeaders(),
         })
         .pipe(
           catchError((error: AxiosError) => {
@@ -66,7 +73,7 @@ export class WbApiService {
         .post<WbAPIContentResponse>(
           wbApiLinks.getProducts,
           { settings },
-          { headers: this.setAuthHeaders() },
+          { headers: await this.setAuthHeaders() },
         )
         .pipe(
           catchError((error: AxiosError) => {
@@ -136,7 +143,7 @@ export class WbApiService {
     const { data } = await firstValueFrom(
       this.httpService
         .get<WBFeedbacksResponse | WBQuestionsResponse>(link, {
-          headers: this.setAuthHeaders(),
+          headers: await this.setAuthHeaders(),
           params: params,
         })
         .pipe(
@@ -167,7 +174,7 @@ export class WbApiService {
     const { data } = await firstValueFrom(
       this.httpService
         .get<WBClaimsResponse>(wbApiLinks.getClaims, {
-          headers: this.setAuthHeaders(),
+          headers: await this.setAuthHeaders(),
           params: params,
         })
         .pipe(
@@ -185,7 +192,7 @@ export class WbApiService {
     const { data } = await firstValueFrom(
       this.httpService
         .get<WBChatEventsSuccessResponse>(wbApiLinks.getChats, {
-          headers: this.setAuthHeaders(),
+          headers: await this.setAuthHeaders(),
           params: params,
         })
         .pipe(

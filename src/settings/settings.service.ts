@@ -43,6 +43,16 @@ export class SettingsService {
     }
   }
 
+  async getWbAccessData() {
+    const entry = await this.accessDataRepo.findOneBy({ id: 1 });
+
+    if (entry) {
+      return {
+        token: decrypt(entry.wbToken),
+      };
+    }
+  }
+
   async updateAccessDataField(dto: UpdateAccessDataDto) {
     const entry = await this.accessDataRepo.findOneBy({ id: 1 });
 
