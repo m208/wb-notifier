@@ -1,13 +1,25 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryColumn, Column } from 'typeorm';
 
 @Entity()
 export class Settings {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn()
+  id: number = 1;
 
   @Column({ default: true })
-  getOrders: boolean;
+  trackNewOrders: boolean;
 
   @Column({ default: true })
-  getFeedbacks: boolean;
+  trackNewFeedbacks: boolean;
+
+  @Column({ default: true })
+  trackNewQuestions: boolean;
+
+  @Column({ default: true })
+  trackNewClaims: boolean;
+
+  @Column({ default: true })
+  trackNewChatMessages: boolean;
+
+  @Column({ default: true })
+  trackTokenExpiration: boolean;
 }

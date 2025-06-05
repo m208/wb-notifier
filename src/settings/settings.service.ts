@@ -3,25 +3,28 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-// import { CreateSettingDto } from './dto/create-setting.dto';
-// import { UpdateSettingDto } from './dto/update-setting.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccessVariables } from 'src/entities/access-variables.entity';
 import { Repository } from 'typeorm';
 import { UpdateAccessDataDto } from './dto/update-access-data.dto';
 import { decrypt, encrypt } from 'src/utils/crypto';
+import { Settings } from 'src/entities/settings.entity';
+import { SettingsDto } from './dto/settings.dto';
 
 @Injectable()
 export class SettingsService {
   constructor(
     @InjectRepository(AccessVariables)
     private readonly accessDataRepo: Repository<AccessVariables>,
+
+    @InjectRepository(Settings)
+    private readonly settingsRepo: Repository<Settings>,
   ) {}
 
   async onModuleInit() {
-    const existing = await this.accessDataRepo.findOneBy({ id: 1 });
+    const accessData = await this.accessDataRepo.findOneBy({ id: 1 });
 
-    if (!existing) {
+    if (!accessData) {
       const predefinedEntry: AccessVariables = {
         id: 1,
         tgToken: '',
@@ -30,6 +33,25 @@ export class SettingsService {
       };
       await this.accessDataRepo.save(predefinedEntry);
     }
+
+    const settingsData = await this.settingsRepo.findOneBy({ id: 1 });
+
+    if (!settingsData) {
+      this.settingsRepo.save({ id: 1 });
+    }
+  }
+
+  async getSettings(): Promise<SettingsDto | null> {
+    const settings = await this.settingsRepo.findOneBy({ id: 1 });
+    if (!settings) return null;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, ...rest } = settings;
+    return rest;
+  }
+
+  async updateSettings(dto: SettingsDto) {
+    return await this.settingsRepo.save({ id: 1, ...dto });
   }
 
   async getTelegramAccessData() {
@@ -82,24 +104,4 @@ export class SettingsService {
       message: `${dto.field} updated`,
     };
   }
-
-  // create(createSettingDto: CreateSettingDto) {
-  //   return 'This action adds a new setting';
-  // }
-
-  // findAll() {
-  //   return `This action returns all settings`;
-  // }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} setting`;
-  // }
-
-  // update(id: number, updateSettingDto: UpdateSettingDto) {
-  //   return `This action updates a #${id} setting`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} setting`;
-  // }
 }

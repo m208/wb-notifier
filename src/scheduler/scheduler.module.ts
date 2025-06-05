@@ -6,6 +6,7 @@ import { NewQuestionsModule } from 'src/new-questions/new-questions.module';
 import { NewFeedbacksTrackerModule } from 'src/new-feedbacks-tracker/new-feedbacks-tracker.module';
 import { NewClaimsTrackerModule } from 'src/new-claims-tracker/new-claims-tracker.module';
 import { NewChatsModule } from 'src/new-chats/new-chats.module';
+import { SettingsModule } from 'src/settings/settings.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { NewChatsModule } from 'src/new-chats/new-chats.module';
     NewFeedbacksTrackerModule,
     NewClaimsTrackerModule,
     NewChatsModule,
+    SettingsModule,
   ],
   providers: [SchedulerService],
 })

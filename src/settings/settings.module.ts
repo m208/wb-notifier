@@ -3,9 +3,10 @@ import { SettingsService } from './settings.service';
 import { SettingsController } from './settings.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AccessVariables } from 'src/entities/access-variables.entity';
+import { Settings } from 'src/entities/settings.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([AccessVariables])],
+  imports: [TypeOrmModule.forFeature([AccessVariables, Settings])],
   controllers: [SettingsController],
   providers: [SettingsService],
   exports: [SettingsService],
