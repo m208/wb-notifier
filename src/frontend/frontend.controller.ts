@@ -10,7 +10,7 @@ export class FrontendController {
 
   @Get('/')
   root(@Res() res: Response) {
-    res.redirect('/settings');
+    res.redirect('/app-settings');
   }
 
   @Get('/login')
@@ -19,14 +19,14 @@ export class FrontendController {
     const user = this.authService.verify(token);
 
     if (user) {
-      return res.redirect('/settings');
+      return res.redirect('/app-settings');
     }
 
     return res.sendFile(join(__dirname, '..', '..', 'public', 'login.html'));
   }
 
   @UseGuards(AuthGuard)
-  @Get('/settings')
+  @Get('/app-settings')
   getSettings(@Res() res: Response) {
     res.sendFile(join(__dirname, '..', '..', 'public', 'settings.html'));
   }

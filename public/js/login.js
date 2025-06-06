@@ -1,7 +1,3 @@
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('JS attached');
-});
-
 document
   .getElementById('login-form')
   .addEventListener('submit', async (event) => {
@@ -18,7 +14,7 @@ document
     });
 
     if (response.ok) {
-      window.location.href = '/settings';
+      window.location.href = '/app-settings';
     } else {
       const text = await response.text();
 
