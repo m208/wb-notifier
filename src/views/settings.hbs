@@ -1,0 +1,70 @@
+<main>
+  <h1>Настройки приложения</h1>
+  <section class='tracking'>
+    <h2>Отслеживать:</h2>
+    <form id='tracking-form'>
+      <label>
+        <input
+          type='checkbox'
+          name='trackNewOrders'
+          id='trackNewOrders'
+          checked
+        />
+        Новые заказы FBS
+      </label>
+
+      <label>
+        <input
+          type='checkbox'
+          name='trackNewFeedbacks'
+          id='trackNewFeedbacks'
+          checked
+        />
+        Новые отзывы
+      </label>
+
+      <label>
+        <input
+          type='checkbox'
+          name='trackNewQuestions'
+          id='trackNewQuestions'
+          checked
+        />
+        Новые вопросы покупателей
+      </label>
+
+      <label>
+        <input
+          type='checkbox'
+          name='trackNewClaims'
+          id='trackNewClaims'
+          checked
+        />
+        Новые заявки на возврат
+      </label>
+
+      <label>
+        <input
+          type='checkbox'
+          name='trackNewChatMessages'
+          id='trackNewChatMessages'
+          checked
+        />
+        Новые сообщения от покупателей
+      </label>
+
+      <label>
+        <input
+          type='checkbox'
+          name='trackTokenExpiration'
+          id='trackTokenExpiration'
+          checked
+        />
+        Актуальность токена доступа к API Wildberries
+      </label>
+
+      <button type='submit' id='tracking-submit' disabled>Обновить</button>
+    </form>
+  </section>
+</main>
+<script type='module' src='/static/js/settings.js'></script>

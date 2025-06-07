@@ -2,22 +2,22 @@ export const dashBoardRouteValues = [
   {
     name: 'settings',
     link: '/app-settings',
-    text: 'Настройки',
+    label: 'Настройки',
   },
   {
     name: 'tokens',
     link: '/access-tokens',
-    text: 'API ключи',
+    label: 'API ключи',
   },
   {
     name: 'stats',
     link: '/stats',
-    text: 'Статус',
+    label: 'Статус',
   },
   {
     name: 'logs',
     link: '/logs',
-    text: 'Логи',
+    label: 'Логи',
   },
 ];
 

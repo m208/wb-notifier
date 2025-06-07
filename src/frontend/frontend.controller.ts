@@ -1,6 +1,5 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Render, Req, Res, UseGuards } from '@nestjs/common';
 import { Response, Request } from 'express';
-import { join } from 'path';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AuthService } from 'src/auth/auth.service';
 
@@ -14,6 +13,7 @@ export class FrontendController {
   }
 
   @Get('/login')
+  @Render('login')
   getLogin(@Req() req: Request, @Res() res: Response) {
     const token = req.cookies?.token;
     const user = this.authService.verify(token);
@@ -22,12 +22,18 @@ export class FrontendController {
       return res.redirect('/app-settings');
     }
 
-    return res.sendFile(join(__dirname, '..', '..', 'public', 'login.html'));
+    return {
+      layout: 'no-header',
+      title: 'Вход',
+    };
   }
 
   @UseGuards(AuthGuard)
   @Get('/app-settings')
-  getSettings(@Res() res: Response) {
-    res.sendFile(join(__dirname, '..', '..', 'public', 'settings.html'));
+  @Render('settings')
+  getSettings() {
+    return {
+      title: 'Настройки',
+    };
   }
 }
