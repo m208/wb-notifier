@@ -9,6 +9,10 @@
   align-items: center;
 }
 
+.nav_item {
+  margin-right: 1rem;
+}
+
 .tracking form {
   display: flex;
   flex-direction: column;

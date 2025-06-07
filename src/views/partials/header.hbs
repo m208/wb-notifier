@@ -1,14 +1,12 @@
 <div id='layout__header' class='header__wrapper'>
   <header class='header'>
     <nav>
-      <ul>
-        {{#each nav}}
-          <li><a href='{{this.link}}'>{{this.label}}</a></li>
-        {{/each}}
-      </ul>
+      {{#each nav}}
+        <a class='nav_item' href='{{this.link}}'>{{this.label}}</a>
+      {{/each}}
     </nav>
-    <form method='POST' action='/auth/logout' style='margin: 0'>
-      <button type='submit' style='padding: 0.5rem 1rem'>Выход</button>
+    <form method='POST' action='/auth/logout'>
+      <button type='submit'>Выход</button>
     </form>
   </header>
 </div>
