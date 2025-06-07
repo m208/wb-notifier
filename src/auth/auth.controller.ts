@@ -12,7 +12,7 @@ export class AuthController {
     const token = await this.authService.login(dto);
 
     if (!token) {
-      return res.status(401).send('Неверный логин или пароль');
+      return res.status(401).send('Неверный логин или пароль!');
     }
 
     res.cookie('token', token, { httpOnly: true });

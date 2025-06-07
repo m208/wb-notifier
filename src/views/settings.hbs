@@ -1,0 +1,16 @@
+<main>
+  <h1>Настройки приложения</h1>
+  <section class="tracking">
+    <h2>Отслеживать:</h2>
+    <form id="tracking-form">
+      {{#each trackingOptions}}
+        <label>
+          <input type="checkbox" name="{{name}}" id="{{name}}" {{#if checked}}checked{{/if}} />
+          {{label}}
+        </label>
+      {{/each}}
+      <button type="submit" id="tracking-submit" disabled>Обновить</button>
+    </form>
+  </section>
+</main>
+<script type="module" src="/static/js/settings.js"></script>
