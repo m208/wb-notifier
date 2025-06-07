@@ -1,6 +1,5 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { Response, Request } from 'express';
-import { join } from 'path';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AuthService } from 'src/auth/auth.service';
 
@@ -33,7 +32,7 @@ export class FrontendController {
   getSettings(@Res() res: Response) {
     return res.render('settings', {
       title: 'Настройки',
-      layout: 'layouts/main',
+
       nav: [
         { label: 'Настройки', link: '/app-settings' },
         { label: 'Лог', link: '/log' },
