@@ -10,11 +10,6 @@
         "include": "views/**/*",
         "watchAssets": true,
         "outDir": "dist/"
-      },
-      {
-        "include": "public/**/*",
-        "watchAssets": true,
-        "outDir": "dist/public"
       }
     ]
   }
