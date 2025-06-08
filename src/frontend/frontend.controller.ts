@@ -36,4 +36,31 @@ export class FrontendController {
       title: 'Настройки',
     };
   }
+
+  @UseGuards(AuthGuard)
+  @Get('/access-tokens')
+  @Render('access')
+  getAccessTokens() {
+    return {
+      title: 'API ключи',
+    };
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/stats')
+  @Render('stats')
+  getStats() {
+    return {
+      title: 'Текущий статус',
+    };
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/logs')
+  @Render('logs')
+  getLogs() {
+    return {
+      title: 'Журнал',
+    };
+  }
 }
