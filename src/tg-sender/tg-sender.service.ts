@@ -32,4 +32,18 @@ export class TgSenderService {
 
     return data;
   }
+
+  async checkIsTokenValid(token: string) {
+    try {
+      const response = await firstValueFrom(
+        this.httpService.get(`https://api.telegram.org/bot${token}/getMe`),
+      );
+      return {
+        isValid: true,
+        username: response.data.result.username,
+      };
+    } catch (error) {
+      return { isValid: false };
+    }
+  }
 }
