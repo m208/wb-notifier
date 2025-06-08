@@ -1,9 +1,19 @@
-import { Controller, Get, Render, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Render,
+  Req,
+  Res,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { Response, Request } from 'express';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AuthService } from 'src/auth/auth.service';
+import { ViewContextInterceptor } from './view-context.interceptor';
 
 @Controller()
+@UseInterceptors(ViewContextInterceptor)
 export class FrontendController {
   constructor(private readonly authService: AuthService) {}
 
