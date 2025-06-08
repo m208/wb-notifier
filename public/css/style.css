@@ -1,9 +1,4 @@
-.header__wrapper {
-  height: 3rem;
-}
-
 .header {
-  padding: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -16,4 +11,39 @@
 .tracking form {
   display: flex;
   flex-direction: column;
+}
+
+.input__group {
+  display: flex;
+}
+
+.input__group input {
+  width: 100%;
+}
+
+.token_section {
+  margin-bottom: 3rem;
+}
+
+.token_info__chips {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.chips {
+  font-size: smaller;
+  background-color: #f2f2f0;
+  padding-left: 0.5rem;
+  padding-right: 1rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  border-radius: 0.2rem;
+}
+
+.chips_ok::before {
+  content: '✔️ ';
+}
+.chips_fail::before {
+  content: '❌ ';
 }
