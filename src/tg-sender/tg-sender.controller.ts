@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { TgSenderService } from './tg-sender.service';
 import { TokenDto } from './dto/token-validation.dto';
 
@@ -6,8 +6,13 @@ import { TokenDto } from './dto/token-validation.dto';
 export class TgSenderController {
   constructor(private readonly tgService: TgSenderService) {}
 
+  @Get('/is-valid')
+  async getTokenData() {
+    return this.tgService.checkIsServerTokenValid();
+  }
+
   @Post('/is-valid')
-  async getTokenData(@Body() dto: TokenDto) {
+  async postTokenData(@Body() dto: TokenDto) {
     return this.tgService.checkIsTokenValid(dto.token);
   }
 }

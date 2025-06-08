@@ -46,4 +46,11 @@ export class TgSenderService {
       return { isValid: false };
     }
   }
+
+  async checkIsServerTokenValid() {
+    const accessData = await this.settingsService.getTelegramAccessData();
+    if (!accessData) return { isValid: false };
+
+    return this.checkIsTokenValid(accessData['tg-token']);
+  }
 }
