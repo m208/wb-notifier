@@ -25,29 +25,32 @@
 
   <section class='token_section'>
     <h2>Токен бота Telegram</h2>
-    <form action=''>
+    <form id='tg-bot-token-form'>
       <div class='input__group'>
-        <input type='text' placeholder='*********' />
+        <input type='text' name='token' placeholder='*********' />
         <button type='submit'>Обновить</button>
       </div>
     </form>
 
     <div class='token_info'>
-      <p class='token_info__valid'>
-        ✔️ токен валидный
-      </p>
+      <div id='tg-token-info'></div>
+      <div id='tg-token-update-result'></div>
     </div>
+
   </section>
 
   <section class='token_section'>
-    <h2>Id пользователя или чата Telegram</h2>
-    <form action=''>
+    <h2>ID пользователя или чата Telegram</h2>
+    <form id='tg-chat-form'>
       <div class='input__group'>
-        <input type='text' placeholder='*********' />
+        <input type='text' name='chat' placeholder='*********' />
         <button type='submit'>Обновить</button>
       </div>
     </form>
+
+    <div id='tg-chat-update-result'></div>
+
   </section>
 
 </main>
-<script src='static/js/tokens.js'></script>
+<script src='static/js/telegram-access.js'></script>
