@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   initTokenForm({
     service: 'tg',
-    validateUrl: '/tg/is-valid',
+    validateUrl: '/tg/is-valid-token',
+    validateValue: 'token',
     formId: 'tg-bot-token-form',
     infoId: 'tg-token-info',
     resultId: 'tg-token-update-result',
@@ -12,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTokenForm({
     service: 'wb',
     validateUrl: '/token',
+    validateValue: 'token',
     formId: 'wb-token-form',
     infoId: 'wb_token_info__valid',
     resultId: 'wb-token-update-result',
@@ -19,11 +21,21 @@ document.addEventListener('DOMContentLoaded', () => {
     showValidation: showWbValidationResult,
   });
 
-  initChatForm();
+  initTokenForm({
+    service: 'tg-chat',
+    validateUrl: '/tg/is-valid-chat',
+    validateValue: 'chat',
+    formId: 'tg-chat-form',
+    infoId: 'tg-chat-info',
+    resultId: 'tg-chat-update-result',
+    saveField: 'tg-chat-id',
+    showValidation: showTgChatValidationResult,
+  });
 });
 
 function initTokenForm({
   validateUrl,
+  validateValue,
   formId,
   infoId,
   resultId,
@@ -34,7 +46,7 @@ function initTokenForm({
 
   document.getElementById(formId).addEventListener('submit', async (e) => {
     e.preventDefault();
-    const token = new FormData(e.target).get('token')?.trim();
+    const token = new FormData(e.target).get(validateValue)?.trim();
     if (!token) return;
 
     const validation = await validateToken(validateUrl, token);
@@ -58,7 +70,7 @@ async function validateToken(url, token = null) {
 
   if (token) {
     const formData = new URLSearchParams();
-    formData.append('token', token);
+    formData.append('value', token);
     options.body = formData;
   }
 
@@ -129,16 +141,11 @@ function showWbValidationResult(result, elId) {
   });
 }
 
-function initChatForm() {
-  const form = document.getElementById('tg-chat-form');
-  if (!form) return;
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const chat = new FormData(e.target).get('chat')?.trim();
-    if (!chat) return;
-
-    const success = await saveToken('tg-chat-id', chat);
-    updateStatus(success, 'tg-chat-update-result');
-  });
+function showTgChatValidationResult(result, elId) {
+  const el = document.getElementById(elId);
+  if (!result || !result.isValid) {
+    el.innerText = '❌ Пользователь не существует или еще не писал боту';
+  } else {
+    el.innerText = `✔️ Бот может писать. Название чата: ${result.displayName}, тип: '${result.type}'`;
+  }
 }

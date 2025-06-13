@@ -6,13 +6,23 @@ import { TokenDto } from './dto/token-validation.dto';
 export class TgSenderController {
   constructor(private readonly tgService: TgSenderService) {}
 
-  @Get('/is-valid')
+  @Get('/is-valid-token')
   async getTokenData() {
     return this.tgService.checkIsServerTokenValid();
   }
 
-  @Post('/is-valid')
+  @Get('/is-valid-chat')
+  async getChatData() {
+    return this.tgService.checkIsChatAccesible();
+  }
+
+  @Post('/is-valid-token')
+  async postChatData(@Body() dto: TokenDto) {
+    return this.tgService.checkIsTokenValid(dto.value);
+  }
+
+  @Post('/is-valid-chat')
   async postTokenData(@Body() dto: TokenDto) {
-    return this.tgService.checkIsTokenValid(dto.token);
+    return this.tgService.checkIsChatAccesible(dto.value);
   }
 }

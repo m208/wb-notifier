@@ -13,7 +13,7 @@ export class TokenTrackerController {
 
   @Post()
   async postTokenData(@Body() dto: TokenDto) {
-    return this.tokenService.getTokenData(dto.token);
+    return this.tokenService.getTokenData(dto.value);
   }
 
   @Get('/expires')
