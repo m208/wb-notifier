@@ -1,8 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import { HttpException, Injectable, Logger } from '@nestjs/common';
 import { AxiosError } from 'axios';
-import { firstValueFrom, catchError } from 'rxjs';
-import { wbApiLinks } from 'src/constants/apiLinks';
+import { firstValueFrom, catchError, map, of } from 'rxjs';
+import { wbApiLinks, wbConnectionCheckList } from 'src/constants/apiLinks';
 import { WbAPIOrdersResponse } from './interfaces/wb-orders-response.interface';
 import {
   WBContentDataDTO,
@@ -216,5 +216,28 @@ export class WbApiService {
     );
 
     return data.result.events;
+  }
+
+  async getTokenMethods() {
+    const promises = wbConnectionCheckList.map(async (el) => ({
+      [el.category]: await this.getMethodCheck(el.url),
+    }));
+
+    return Promise.all(promises);
+  }
+
+  async getMethodCheck(url: string) {
+    return await firstValueFrom(
+      this.httpService
+        .get<unknown>(url, {
+          headers: await this.setAuthHeaders(),
+        })
+        .pipe(
+          map(() => true),
+          catchError(() => {
+            return of(false);
+          }),
+        ),
+    );
   }
 }

@@ -6,3 +6,26 @@ export const wbApiLinks = {
   getClaims: `https://returns-api.wildberries.ru/api/v1/claims`,
   getChats: `https://buyer-chat-api.wildberries.ru/api/v1/seller/events`,
 };
+
+export const wbConnectionCheckList = [
+  {
+    category: 'content',
+    url: `https://content-api.wildberries.ru/ping`,
+  },
+  {
+    category: 'marketplace',
+    url: `https://marketplace-api.wildberries.ru/ping`,
+  },
+  {
+    category: 'feedbacks',
+    url: `https://feedbacks-api.wildberries.ru/ping`,
+  },
+  {
+    category: 'returns',
+    url: `https://returns-api.wildberries.ru/ping`,
+  },
+  {
+    category: 'chat',
+    url: `https://buyer-chat-api.wildberries.ru/ping`,
+  },
+];

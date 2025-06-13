@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { LINE_DIVIDER_TG } from 'src/constants/messageText';
 import { SettingsService } from 'src/settings/settings.service';
 import { TgSenderService } from 'src/tg-sender/tg-sender.service';
+import { WbApiService } from 'src/wb-api/wb-api.service';
 
 const DAYS_BEFORE_WARN = 30;
 
@@ -12,6 +13,7 @@ export class TokenTrackerService {
     private jwtService: JwtService,
     private readonly tgSenderService: TgSenderService,
     private readonly settingsService: SettingsService,
+    private readonly wbApiService: WbApiService,
   ) {}
 
   async getTokenExpiringDate() {
@@ -44,10 +46,14 @@ export class TokenTrackerService {
     return lines.join(LINE_DIVIDER_TG);
   }
 
-  async getTokenData() {
+  async getTokenExpirationData() {
     const expiringDate = (await this.getTokenExpiringDate()).toLocaleDateString(
       'ru-RU',
     );
     return `Токен действителен до ${expiringDate}`;
+  }
+
+  async getTokenData() {
+    return await this.wbApiService.getTokenMethods();
   }
 }

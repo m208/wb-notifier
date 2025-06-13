@@ -9,4 +9,9 @@ export class TokenTrackerController {
   async getTokenData() {
     return this.tokenService.getTokenData();
   }
+
+  @Get('/expires')
+  async getTokenExpirationData() {
+    return this.tokenService.getTokenExpirationData();
+  }
 }
