@@ -42,12 +42,16 @@ export class WbApiService {
     private readonly settingsService: SettingsService,
   ) {}
 
-  async setAuthHeaders() {
-    const accessData = await this.settingsService.getWbAccessData();
-    const token = accessData ? accessData.token : '';
+  async setAuthHeaders(token?: string) {
+    let effectiveToken = token;
+
+    if (!effectiveToken) {
+      const accessData = await this.settingsService.getWbAccessData();
+      effectiveToken = accessData ? accessData.token : '';
+    }
 
     return {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${effectiveToken}`,
     };
   }
 
@@ -218,19 +222,23 @@ export class WbApiService {
     return data.result.events;
   }
 
-  async getTokenMethods() {
+  async getTokenMethods(token?: string) {
     const promises = wbConnectionCheckList.map(async (el) => ({
-      [el.category]: await this.getMethodCheck(el.url),
+      [el.category]: await this.getMethodCheck(el.url, token),
     }));
 
-    return Promise.all(promises);
+    const methods = await Promise.all(promises);
+
+    return methods.reduce((acc, item) => {
+      return { ...acc, ...item };
+    }, {});
   }
 
-  async getMethodCheck(url: string) {
+  async getMethodCheck(url: string, token?: string) {
     return await firstValueFrom(
       this.httpService
         .get<unknown>(url, {
-          headers: await this.setAuthHeaders(),
+          headers: await this.setAuthHeaders(token),
         })
         .pipe(
           map(() => true),
