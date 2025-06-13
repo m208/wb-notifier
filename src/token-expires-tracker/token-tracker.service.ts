@@ -7,7 +7,7 @@ import { TgSenderService } from 'src/tg-sender/tg-sender.service';
 const DAYS_BEFORE_WARN = 30;
 
 @Injectable()
-export class TokenExpiresTrackerService {
+export class TokenTrackerService {
   constructor(
     private jwtService: JwtService,
     private readonly tgSenderService: TgSenderService,
@@ -44,7 +44,7 @@ export class TokenExpiresTrackerService {
     return lines.join(LINE_DIVIDER_TG);
   }
 
-  async getTokenExpiresData() {
+  async getTokenData() {
     const expiringDate = (await this.getTokenExpiringDate()).toLocaleDateString(
       'ru-RU',
     );

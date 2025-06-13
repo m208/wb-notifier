@@ -6,13 +6,13 @@ import { NewFeedbacksTrackerService } from 'src/new-feedbacks-tracker/new-feedba
 import { NewOrdersTrackerService } from 'src/new-orders-tracker/new-orders-tracker.service';
 import { NewQuestionsService } from 'src/new-questions/new-questions.service';
 import { SettingsService } from 'src/settings/settings.service';
-import { TokenExpiresTrackerService } from 'src/token-expires-tracker/token-expires-tracker.service';
+import { TokenTrackerService } from 'src/token-expires-tracker/token-tracker.service';
 
 @Injectable()
 export class SchedulerService {
   constructor(
     private readonly trackingService: NewOrdersTrackerService,
-    private readonly tokenService: TokenExpiresTrackerService,
+    private readonly tokenService: TokenTrackerService,
     private readonly questionsService: NewQuestionsService,
     private readonly feedbacksService: NewFeedbacksTrackerService,
     private readonly claimsService: NewClaimsTrackerService,

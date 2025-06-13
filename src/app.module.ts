@@ -6,7 +6,7 @@ import { WbApiModule } from './wb-api/wb-api.module';
 import { ConfigModule } from '@nestjs/config';
 import { TgSenderModule } from './tg-sender/tg-sender.module';
 import { NewOrdersTrackerModule } from './new-orders-tracker/new-orders-tracker.module';
-import { TokenExpiresTrackerModule } from './token-expires-tracker/token-expires-tracker.module';
+import { TokenTrackerModule } from './token-expires-tracker/token-tracker.module';
 import { NewQuestionsModule } from './new-questions/new-questions.module';
 import { NewFeedbacksTrackerModule } from './new-feedbacks-tracker/new-feedbacks-tracker.module';
 import { NewClaimsTrackerModule } from './new-claims-tracker/new-claims-tracker.module';
@@ -42,7 +42,7 @@ import { SettingsModule } from './settings/settings.module';
     WbApiModule,
     TgSenderModule,
     NewOrdersTrackerModule,
-    TokenExpiresTrackerModule,
+    TokenTrackerModule,
     NewQuestionsModule,
     NewFeedbacksTrackerModule,
     NewClaimsTrackerModule,
