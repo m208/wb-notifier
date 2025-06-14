@@ -1,5 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { LINE_DIVIDER_TG } from 'src/constants/messageText';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { LINE_DIVIDER_TG, NEW_CHATS_MESSAGE } from 'src/constants/messageText';
 import { TgSenderService } from 'src/tg-sender/tg-sender.service';
 import {
   WBChatEvent,
@@ -7,21 +9,31 @@ import {
   WBChatMessage,
 } from 'src/wb-api/interfaces/wb-chat-events.interface';
 import { WbApiService } from 'src/wb-api/wb-api.service';
+import { NextMessageCursor } from 'src/entities/next-message-cursor.entity';
 
 @Injectable()
 export class NewChatsService {
   private readonly logger = new Logger(NewChatsService.name);
 
-  // TODO: store this at database
-  private lastUsedPaginator: number = Date.now();
-
   constructor(
+    @InjectRepository(NextMessageCursor)
+    private readonly cursorRepo: Repository<NextMessageCursor>,
     private readonly wbApiService: WbApiService,
     private readonly tgSenderService: TgSenderService,
   ) {}
 
+  async getCursor() {
+    const cursor = await this.cursorRepo.findOneBy({ id: 1 });
+    return cursor.nextMessageCursor || Date.now();
+  }
+
+  async updateCursor() {
+    await this.cursorRepo.save({ id: 1, nextMessageCursor: Date.now() });
+  }
+
   async requestChatMessages() {
-    return await this.getNewChatMessages();
+    const messages = await this.getNewChatMessages();
+    return `${NEW_CHATS_MESSAGE} ${messages.length}`;
   }
 
   async checkNewChatMessages() {
@@ -31,11 +43,11 @@ export class NewChatsService {
 
   async getNewChatMessages() {
     const paginatorSetting: WBChatEventsRequestParams = {
-      next: this.lastUsedPaginator,
+      next: await this.getCursor(),
     };
 
     const chatEvents = await this.wbApiService.getChatEvents(paginatorSetting);
-    this.lastUsedPaginator = Date.now();
+    await this.updateCursor();
 
     return this.collectNewChatMessages(chatEvents);
   }

@@ -21,6 +21,7 @@ import { Settings } from './entities/settings.entity';
 import { User } from './entities/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { SettingsModule } from './settings/settings.module';
+import { NextMessageCursor } from './entities/next-message-cursor.entity';
 
 @Module({
   imports: [
@@ -34,7 +35,7 @@ import { SettingsModule } from './settings/settings.module';
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'app.db',
-      entities: [User, Settings, AccessVariables],
+      entities: [User, Settings, AccessVariables, NextMessageCursor],
       synchronize: true,
     }),
     ScheduleModule.forRoot(),
