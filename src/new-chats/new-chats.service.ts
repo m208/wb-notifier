@@ -24,7 +24,7 @@ export class NewChatsService {
 
   async getCursor() {
     const cursor = await this.cursorRepo.findOneBy({ id: 1 });
-    return cursor.nextMessageCursor || Date.now();
+    return cursor ? cursor.nextMessageCursor : Date.now();
   }
 
   async updateCursor() {
