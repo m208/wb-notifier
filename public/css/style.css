@@ -54,3 +54,13 @@
 .chips_fail::before {
   content: '❌ ';
 }
+
+.stats__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stats__item button {
+  width: 10rem;
+}
